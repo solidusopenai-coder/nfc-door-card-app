@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NFC門禁卡</string>
+    
+    <!-- Main Screen -->
+    <string name="main_title">NFC 門禁卡模擬</string>
+    <string name="main_no_cards">暫無儲存嘅卡片\n請掃描一張門禁卡開始</string>
+    <string name="main_scan_hint">將手機背部貼近門禁卡以讀取</string>
+    <string name="main_add_card">新增卡片</string>
+    <string name="main_delete_confirm">確定刪除呢張卡？</string>
+    
+    <!-- Card Details -->
+    <string name="card_detail_title">卡片詳情</string>
+    <string name="card_uid">UID</string>
+    <string name="card_type">類型</string>
+    <string name="card_data">資料區塊</string>
+    <string name="card_rename">重新命名</string>
+    <string name="card_activate">設為活躍卡</string>
+    <string name="card_deactivate">停用</string>
+    
+    <!-- NFC Reader -->
+    <string name="nfc_reading">正在讀取卡片…\n請保持貼合</string>
+    <string name="nfc_success">讀取成功！</string>
+    <string name="nfc_error">讀取失敗，請重試</string>
+    <string name="nfc_not_supported">呢部手機唔支援 NFC</string>
+    <string name="nfc_disabled">請開啟 NFC 功能</string>
+    
+    <!-- Actions -->
+    <string name="action_save">儲存</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_delete">刪除</string>
+    <string name="action_edit">編輯</string>
+    
+    <!-- Status Messages -->
+    <string name="status_active_card">活躍卡片</string>
+    <string name="status_no_active">未設活躍卡</string>
+    <string name="toast_card_saved">卡片已儲存 ✅</string>
+    <string name="toast_card_deleted">卡片已刪除 🗑️</string>
+</resources>
