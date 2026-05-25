@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- NFC Permissions -->
     <uses-feature
@@ -51,6 +52,7 @@
             android:name=".NfcCardEmulationService"
             android:exported="true"
             android:foregroundServiceType="nfcCardEmulation"
+            tools:targetApi="34"
             android:permission="android.permission.BIND_NFC_SERVICE">
             <intent-filter>
                 <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
