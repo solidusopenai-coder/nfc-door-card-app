@@ -27,6 +27,9 @@ data class CardEntity(
     /** 完整資料區塊（hex string） */
     val dataBlocks: String = "",
     
+    /** 額外信息 */
+    val extraInfo: String = "",
+    
     /** 創建時間 */
     val createdAt: Long = System.currentTimeMillis(),
     

@@ -73,9 +73,9 @@ class NfcReaderService {
             // 嘗試用常見密碼驗證區塊（MIFARE Classic 默認密碼）
             val defaultKeys = listOf(
                 byteArrayOf(0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte()),
-                byteArrayOf(0x00, 0x00, 0x00, 0x00, 0x00, 0x00),
-                byteArrayOf(0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5),
-                byteArrayOf(0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5),
+                byteArrayOf(0x00.toByte(), 0x00.toByte(), 0x00.toByte(), 0x00.toByte(), 0x00.toByte(), 0x00.toByte()),
+                byteArrayOf(0xA0.toByte(), 0xA1.toByte(), 0xA2.toByte(), 0xA3.toByte(), 0xA4.toByte(), 0xA5.toByte()),
+                byteArrayOf(0xB0.toByte(), 0xB1.toByte(), 0xB2.toByte(), 0xB3.toByte(), 0xB4.toByte(), 0xB5.toByte()),
             )
 
             val readableBlocks = mutableListOf<String>()

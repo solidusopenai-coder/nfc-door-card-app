@@ -20,6 +20,16 @@ class NfcCardEmulationService : HostApduService() {
         
         // UID（模擬用，實際讀取時會用真實卡片嘅 UID）
         private var simulatedUid: ByteArray? = null
+        
+        fun setSimulatedUid(uid: ByteArray?) {
+            simulatedUid = uid
+        }
+        
+        fun getSimulatedUid(): ByteArray? = simulatedUid
+        
+        private fun ErrorResponse(): ByteArray {
+            return byteArrayOf(0x6A.toByte(), 0x80.toByte()) // SW1=6A, SW2=80 (Wrong parameters)
+        }
     }
 
     override fun processCommandApdu(commandApdu: ByteArray?, extras: Bundle?): ByteArray? {
@@ -49,17 +59,5 @@ class NfcCardEmulationService : HostApduService() {
     /** ByteArray 轉 hex */
     private fun ByteArray.toHexString(): String {
         return joinToString(" ") { "%02X".format(it) }
-    }
-
-    companion object {
-        fun setSimulatedUid(uid: ByteArray?) {
-            simulatedUid = uid
-        }
-        
-        fun getSimulatedUid(): ByteArray? = simulatedUid
-        
-        private fun ErrorResponse(): ByteArray {
-            return byteArrayOf(0x6A.toByte(), 0x80.toByte()) // SW1=6A, SW2=80 (Wrong parameters)
-        }
     }
 }

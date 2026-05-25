@@ -26,6 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.victor.ncfdoorcard.data.CardEntity
 import com.victor.ncfdoorcard.ui.CardListAdapter
 import com.victor.ncfdoorcard.ui.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nfcAdapter: NfcAdapter
     private lateinit var viewModel: MainViewModel
     private lateinit var readerService: NfcReaderService
+    private val scope = CoroutineScope(Dispatchers.Main)
     
     private lateinit var tvNfcStatus: TextView
     private lateinit var btnScanNfc: Button
@@ -174,39 +178,46 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Use the reader service to extract card data
-        val cardData = runBlocking {
-            readerService.readTag(tag)
-        }
+        scope.launch(Dispatchers.IO) {
+            val cardData = readerService.readTag(tag)
 
-        if (cardData != null) {
-            Log.d(TAG, "Card read successfully: ${cardData.uid} (${cardData.cardType})")
-            
-            // Check if card already exists by UID
-            val existingCard = viewModel.allCards.value?.find { it.uid == cardData.uid }
-            
-            if (existingCard != null) {
-                // Update last used time
-                viewModel.updateLastUsed(existingCard.id)
-                Toast.makeText(this, "卡片已更新 — ${cardData.name}", Toast.LENGTH_SHORT).show()
+            if (cardData != null) {
+                Log.d(TAG, "Card read successfully: ${cardData.uid} (${cardData.cardType})")
+                
+                // Check if card already exists by UID
+                val existingCard = viewModel.allCards.value?.find { it.uid == cardData.uid }
+                
+                if (existingCard != null) {
+                    // Update last used time
+                    viewModel.updateLastUsed(existingCard.id)
+                    runOnUiThread {
+                        Toast.makeText(this@MainActivity, "卡片已更新 — ${cardData.name}", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    // Save new card
+                    val newCard = CardEntity(
+                        uid = cardData.uid,
+                        cardType = cardData.cardType,
+                        name = cardData.name,
+                        dataBlocks = cardData.dataBlocks,
+                        extraInfo = cardData.extraInfo
+                    )
+                    viewModel.addCard(newCard)
+                    runOnUiThread {
+                        Toast.makeText(this@MainActivity, R.string.toast_card_saved, Toast.LENGTH_SHORT).show()
+                    }
+                }
+
             } else {
-                // Save new card
-                val newCard = CardEntity(
-                    uid = cardData.uid,
-                    cardType = cardData.cardType,
-                    name = cardData.name,
-                    dataBlocks = cardData.dataBlocks
-                )
-                viewModel.addCard(newCard)
-                Toast.makeText(this, R.string.toast_card_saved, Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "Failed to read tag")
+                runOnUiThread {
+                    tvNfcStatus.text = getString(R.string.nfc_error)
+                }
             }
 
-        } else {
-            Log.w(TAG, "Failed to read tag")
-            tvNfcStatus.text = getString(R.string.nfc_error)
+            // Reset scan mode after a delay
+            runOnUiThread { resetScanMode() }
         }
-
-        // Reset scan mode after a delay
-        resetScanMode()
     }
 
     private fun observeCards() {
@@ -359,10 +370,5 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    /** Simple coroutine scope for readNfcTag */
-    private suspend inline fun <reified T> runBlocking(block: () -> T): T {
-        return kotlinx.coroutines.runBlocking { block() }
     }
 }
