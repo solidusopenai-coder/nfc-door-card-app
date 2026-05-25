@@ -51,8 +51,6 @@
         <service
             android:name=".NfcCardEmulationService"
             android:exported="true"
-            android:foregroundServiceType="connectedDevice"
-            tools:targetApi="34"
             android:permission="android.permission.BIND_NFC_SERVICE">
             <intent-filter>
                 <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
